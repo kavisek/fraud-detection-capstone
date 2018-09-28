@@ -2,7 +2,7 @@
 # <center>Anomaly Detection </center>
 
 <br><br>
-The following notebook conduct anomaly detection on a variety of datasets. The main goal of this project was evaluated different approaches to anomaly detection that we could take with machine learning given the time remaining for the project that remained. In totally I had used this script to generate and evaluate 60+ model on 3 diffrent datasets. For thes sake of simplicity, I have included the descriptive analytics for all 3 datesets, and their corresponding models scores in the Score subdirectory of this submission and within the metrics section of this notebook. For the core portion of this notebook, I will only be using the synthetic credit card dataset, so we can compare scores across different methodologies. I hope that after reviewing the notebooks finding you will be able to apply some of these anomaly detection algorithms to your problem set. 
+The following notebook conduct anomaly detection on a variety of datasets. The main goal of this project was evaluated different approaches to anomaly detection that we could take with machine learning given the time remaining for the project that remained. In totally I had used this script to generate and evaluate 60+ model on 3 diffrent datasets. For thes sake of simplicity, I have included the descriptive analytics for all 3 datesets, and their corresponding models scores in the Score subdirectory of this submission and within the metrics section of this notebook. For the core portion of this notebook, I will only be using the synthetic credit card dataset, so we can compare scores across different methodologies. I hope that after reviewing the notebooks finding you will be able to apply some of these anomaly detection algorithms to your problem set.
 
 
 I have provided an explanation for every model within each section of the reported.  Please use the Table of contents to navigate the notebook has been provided below.  In Summary, the notebook import the data, a view descriptive analysis is done on the data,  then I apply supervised learning and anomaly detection algorithm to the data. Sources for my datasets have been included in the Sources section at the end of the report for further readings
@@ -83,9 +83,9 @@ I have provided an explanation for every model within each section of the report
 
 <br><br>
 <a id='anomoly'></a>
-### Anomonly Detection 
+### Anomonly Detection
 
-The best way to talk about what anomaly detection and why its so important is by addressing the topic through its business needs. Often business can encounter strange patterns in their data that are against the norm. Behavior that their client or address market are doing that is against the normal behavior. An example of such behavior would be the user who is attacking a network of with DDOS attack, a large surge in users due to an unforeseen event, transactions in a bank that seem suspicious, and the measurement of key business and operational key performance indicators. You could describe any of this behaviour as an outlier in the dataset or unintended behaviors. Anomaly detection is the study of applying different statistical and machine learning techniques to these areas to see if can identify these areas a bit sooner, so we can investigate the root causes before the behavior starts costing the firm more cash. 
+The best way to talk about what anomaly detection and why its so important is by addressing the topic through its business needs. Often business can encounter strange patterns in their data that are against the norm. Behavior that their client or address market are doing that is against the normal behavior. An example of such behavior would be the user who is attacking a network of with DDOS attack, a large surge in users due to an unforeseen event, transactions in a bank that seem suspicious, and the measurement of key business and operational key performance indicators. You could describe any of this behaviour as an outlier in the dataset or unintended behaviors. Anomaly detection is the study of applying different statistical and machine learning techniques to these areas to see if can identify these areas a bit sooner, so we can investigate the root causes before the behavior starts costing the firm more cash.
 
 
 
@@ -108,7 +108,7 @@ train_x, test_x, train_y, test_y = [], [], [], []
 # Import Modules
 import datetime
 import itertools
-import graphviz 
+import graphviz
 import keras
 import matplotlib.pyplot as plt
 import numpy as np
@@ -234,7 +234,7 @@ For the sake of reproducibly, I have set the random seeds for this notebook and 
 
 
 ```python
-# Print versions of each package above 
+# Print versions of each package above
 print("Numpy version: {}".format(np.__version__))
 print("Pandas version: {}".format(pd.__version__))
 print("Sklearn version: {}".format(sklearn.__version__))
@@ -272,7 +272,7 @@ def auc_roc(y_true, y_pred):
     y_pred: An array with the prediction values
 
     '''
-    
+
     # any tensorflow metric
     value, update_op = tf.contrib.metrics.streaming_auc(y_pred, y_true)
 
@@ -295,7 +295,7 @@ def binary_random_downsample(X, y):
     '''
     Function to conduct downsampling for binary crossentropy problem
     between to classes. This function was not used this notebook. but I have kept
-    it in the functoin list because it might be useful in the future. 
+    it in the functoin list because it might be useful in the future.
 
     Parameters
     ----------
@@ -383,9 +383,9 @@ def cross_validate_anomoly(model, cv=10, fit_params=None, verbose=1, train_y=Non
             n_jobs=1,
             verbose=verbose,
             fit_params=fit_params)
-    
+
     #print(scores)
-    
+
     # Record, Name, Dataset, Folds
     cv_folds = int(cv)
     model_name_list.append(model.name)
@@ -430,7 +430,7 @@ def cross_validate_anomoly(model, cv=10, fit_params=None, verbose=1, train_y=Non
 
     return None
 
-          
+
 def cross_validate_normal(model, cv=10, fit_params=None, verbose=1, train_y=None,
                     train_x=None):
     '''
@@ -670,7 +670,7 @@ def f1(y_true, y_pred):
         possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
         recall = true_positives / (possible_positives + K.epsilon())
         return recall
-          
+
     def precision(y_true, y_pred):
         """Precision metric.
 
@@ -683,8 +683,8 @@ def f1(y_true, y_pred):
         predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
         precision = true_positives / (predicted_positives + K.epsilon())
         return precision
-          
-    
+
+
     precision = precision(y_true, y_pred)
     recall = recall(y_true, y_pred)
 
@@ -692,7 +692,7 @@ def f1(y_true, y_pred):
 
 def plot_confusion_anomoly(train_model, train_y, test_y, cmap=plt.cm.Purples):
     '''
-    Function plots a confusion matrix given train and test 
+    Function plots a confusion matrix given train and test
     unsuperived models
 
     Parameters
@@ -714,10 +714,10 @@ def plot_confusion_anomoly(train_model, train_y, test_y, cmap=plt.cm.Purples):
 
     plt.subplot2grid((3,3), (0,0))
     cm = confusion_matrix(train_y, anon_to_target(train_model.predict(train_x)))
-    plot_confusion_matrix(cm, classes, fontsize=20, 
+    plot_confusion_matrix(cm, classes, fontsize=20,
                           title=train_model.name,
                          normalize=True, cmap=cmap)
-    
+
     plt.subplot2grid((3,3), (0,1))
     cm = confusion_matrix(test_y, anon_to_target(train_model.predict(test_x)))
     plot_confusion_matrix(cm, classes, fontsize=20,
@@ -725,13 +725,13 @@ def plot_confusion_anomoly(train_model, train_y, test_y, cmap=plt.cm.Purples):
                          normalize=True, cmap=cmap);
 
     return None
-          
-          
+
+
 def plot_confusion_matrix(cm, classes, fontsize=20,
                           normalize=False, title='Confusion matrix',
                           cmap=plt.cm.Blues):
     '''
-    THE MAIN CONFUSION MATRIX, KAVI DON'T DELTETE BY ACCIDENT AGAIN. Function plots a 
+    THE MAIN CONFUSION MATRIX, KAVI DON'T DELTETE BY ACCIDENT AGAIN. Function plots a
     confusion matrix given a cm matrix and class names
 
     Parameters
@@ -803,7 +803,7 @@ def plot_confusion_matrix(cm, classes, fontsize=20,
 
     return None
 
-def plot_confusion_normal(model, train_x=train_x, train_y=train_y, 
+def plot_confusion_normal(model, train_x=train_x, train_y=train_y,
                           test_x=test_x, test_y=test_y, cmap=plt.cm.Greens):
     '''
     Fuction plota grid and calls the plot_confusion_matrix function
@@ -854,7 +854,7 @@ def plot_confusion_normal(model, train_x=train_x, train_y=train_y,
 
     return None
 
-def plot_confusion_neural(model, train_x=train_x, train_y=train_y, 
+def plot_confusion_neural(model, train_x=train_x, train_y=train_y,
                           test_x=test_x, test_y=test_y, cmap=plt.cm.Oranges):
     '''
     Funtion to plot a grid and calls the plot_confusion_matrix function
@@ -970,7 +970,7 @@ def prob_to_targets(array, thres=0.5):
     Example:
     ---------
     >>>> prob_to_targets([0.23,0.67,0.99])
-    
+
     '''
     array = [1 if i > thres else 0 for i in array]
     array = np.array(array)
@@ -1150,7 +1150,7 @@ def sum_stat(df):
 
 def target_to_anon(array):
     '''
-    Converts prediction in the 
+    Converts prediction in the
     0/1 standard format to 1/-1 anomoly format for every
     value in the array
 
@@ -1185,7 +1185,7 @@ for df in dfs:
     df.columns = df.columns.str.lower()
     if df.columns.contains('class') == True:
         df.columns = df.columns.str.replace('class', 'target')
-        
+
 # Change target column names
 sdf = sdf.rename(columns={'isfraud':'target'})
 
@@ -1198,9 +1198,9 @@ sdf = sdf.rename(columns={'newbalanceorig':'newbalanceorg'})
 
 <br><br>
 <a id='credit'></a>
-### Credit Card Kaggle Data 
+### Credit Card Kaggle Data
 
-Our first credit dataset contains a provided by Kaggle. it contains 28 normalized features and feature of the amount of the transaction. 
+Our first credit dataset contains a provided by Kaggle. it contains 28 normalized features and feature of the amount of the transaction.
 
 The datasets contain transactions made by credit cards in September 2013 by European cardholders. This dataset presents transactions that occurred within two days, where we have 492 cases of fraud out of 284,807 transactions. The dataset is highly unbalanced, the positive class (frauds) account for 0.172% of all transactions. The dataset contains 30 features, 28 of thees features are the numerical input variables which are the result of a PCA transformation.
 
@@ -1539,7 +1539,7 @@ rcParams['figure.figsize'] = (30.0, 10.0)
 
 
 ```python
-# Plotting frequency of Fraud Amounts by Target Value 
+# Plotting frequency of Fraud Amounts by Target Value
 sns.stripplot(x=ccdf["amount"], y=ccdf['target'].astype('category'),
              palette=['#f768a1','#7a0177']);
 plt.title('Target vs Amount')
@@ -1567,7 +1567,7 @@ plt.xlabel('Time Step'); plt.ylabel('Density');
 ```python
 sns.heatmap(ccdf.loc[:,'v1':'amount'].corr());
 plt.title('Feature Correlation Matrix')
-plt.xlabel('Feature'); 
+plt.xlabel('Feature');
 plt.ylabel('Feature');
 plt.yticks(rotation=0);
 ```
@@ -1949,7 +1949,7 @@ sum_stat(sdf.select_dtypes(include=['int','float']))[num_columns].applymap('{:,.
 
 
 ```python
-# Plotting frequency of Fraud Amounts by Target Value 
+# Plotting frequency of Fraud Amounts by Target Value
 sns.stripplot(x=sdf["amount"], y=sdf['target'].astype('category'),
              palette=['#66c2a4','#00441b']);
 plt.title('Transaction Amount vs Fraud Group');
@@ -2008,7 +2008,7 @@ rcParams['figure.figsize'] = (30.0, 10.0)
 
 ```python
 plt.figure()
-sns.lmplot(x="oldbalanceorg", y="newbalanceorg",  hue='target',data=sdf, 
+sns.lmplot(x="oldbalanceorg", y="newbalanceorg",  hue='target',data=sdf,
            palette=['#66c2a4','#00441b'])
 plt.title('Correlation Plot: Old Balance vs New Balance by Target', fontsize=15);
 plt.xlabel('oldbalanceorg', fontsize=10)
@@ -2030,7 +2030,7 @@ Note: There is currently a bug in the lm.plot function that will not allow me to
 ## <center>Preprocessing</center>
 <a id='preprocessing'></a>
 
-Moving forward in the analysis I have subsampled the remaining data to only 100,000 records. I subsampled the data so I am able to run the modeling analysis and training on my laptop in a reasonable amount of time. 
+Moving forward in the analysis I have subsampled the remaining data to only 100,000 records. I subsampled the data so I am able to run the modeling analysis and training on my laptop in a reasonable amount of time.
 
 When we encode our data we change all the object feature in both dataframe into a numeric representation of the data. For the KDD dataset, we encoded all non-anomalies to 0 and all anomalies to 1 to value in line with the encoding of our other datasets. With the Synthetic credit card dataset, we encoding our name_orig, name_dest, and type. We later one-hot-encode the type feature and append the new feature onto out dataset.
 
@@ -2363,9 +2363,9 @@ print(f'Target Classes: {classes}')
 
 # KNN Deviations
 if working_file_name =='synthetics':
-    
+
     print('\n'+'='*10,'KNN Data Shape','='*10,'\n')
-    
+
     X_reduce = wdf.drop(['target','oldbalanceorg'],axis=1).values
     y_reduce = wdf['target'].values
 
@@ -2386,14 +2386,14 @@ if working_file_name =='synthetics':
 ```
 
     Dataset: synthetics
-    ========== Preprocessing ========== 
-    
+    ========== Preprocessing ==========
+
     PCA Components: 9
     Standard Scaler: Yes
-    
-    ========== Data Shape ========== 
-    
-    
+
+    ========== Data Shape ==========
+
+
     DataFrame Shape of X: 100000
     DataFrame Shape of y: 100000
     DataFrame Shape of X: 75000
@@ -2401,10 +2401,10 @@ if working_file_name =='synthetics':
     DataFrame Shape of X: 25000
     DataFrame Shape of y: 25000
     Target Classes: [0, 1]
-    
-    ========== KNN Data Shape ========== 
-    
-    
+
+    ========== KNN Data Shape ==========
+
+
     DataFrame Shape of X: 100000
     DataFrame Shape of y: 100000
     DataFrame Shape of X: 75000
@@ -2425,7 +2425,7 @@ cWe will be taking our processed data and apply it to a different supervise, uns
 <br><br><br><br>
 ## <center>Supervised Learners</center>
 <a id='dummymodel'></a>
-First, we are going to try some supervised approaches on our data. As we conduct our cross-validation for each model moving forwards we will want to store our cross-validation scores for each model so we can access our model afterward. I have created a few lists below that we will appending our scores too. 
+First, we are going to try some supervised approaches on our data. As we conduct our cross-validation for each model moving forwards we will want to store our cross-validation scores for each model so we can access our model afterward. I have created a few lists below that we will appending our scores too.
 
 
 - AUC ROC
@@ -2470,7 +2470,7 @@ joblib.dump(dm_model, 'Model/'+dm_model.name+'_'+working_file_name+'.sav');
 ![png](output_48_1.png)
 
 
-With a dummy classifier that predicts that every one of models is an Anomaly, our ROC MOC score is 0.5 with an F1 score of 0.8886, Precision Score of 0.79995866, and a Recall Score of 100%. This falls in line with our intuition. As the number anomalies in our dataset are so few the default prediction remain generally. 
+With a dummy classifier that predicts that every one of models is an Anomaly, our ROC MOC score is 0.5 with an F1 score of 0.8886, Precision Score of 0.79995866, and a Recall Score of 100%. This falls in line with our intuition. As the number anomalies in our dataset are so few the default prediction remain generally.
 
 <br><br>
 <a id='logisticmodel'></a>
@@ -2486,7 +2486,7 @@ lr_model.name = "logistic_regression"
 lr_model.fit(train_x, train_y, sample_weight = weights)
 
 # Store CV Scores
-# cross_validate_normal(lr_model, cv = 5, fit_params = {'sample_weight': weights}, 
+# cross_validate_normal(lr_model, cv = 5, fit_params = {'sample_weight': weights},
 #                  verbose=0, train_y=train_y, train_x= train_x)
 
 # Plot Model
@@ -2564,26 +2564,26 @@ for kernel in solvers:
     svm_model = SVC(kernel=kernel, verbose=1)
     svm_model.name = 'svm_'+kernel
     svm_model.fit(train_x,train_y, sample_weight = weights);
-    
+
     # Run crossvalidation using the model
     cross_validate_normal(svm_model, cv=5, verbose=0,
                          train_y=train_y, train_x= train_x)
-    
+
     # Plot confusion Matrix
     plot_confusion_normal(svm_model,train_x=train_x, train_y=train_y,
                      test_x=test_x ,test_y=test_y)
-    
+
     # Sho plot
     plt.show()
-    
+
     # Dump Models
     joblib.dump(svm_model, 'Model/svm_model_'+kernel+'_'+working_file_name+'.sav')
 ```
 
-    
-    
-     ========== rbf ========== 
-    
+
+
+     ========== rbf ==========
+
     [LibSVM]Done
     Cross Validation ROC: 0.980282927756915
     Cross Validation F1: 0.6147520305753786
@@ -2595,10 +2595,10 @@ for kernel in solvers:
 ![png](output_60_1.png)
 
 
-    
-    
-     ========== poly ========== 
-    
+
+
+     ========== poly ==========
+
     [LibSVM]Done
     Cross Validation ROC: 0.9009869420491533
     Cross Validation F1: 0.6537974372955289
@@ -2610,10 +2610,10 @@ for kernel in solvers:
 ![png](output_60_3.png)
 
 
-    
-    
-     ========== linear ========== 
-    
+
+
+     ========== linear ==========
+
     [LibSVM]Done
     Cross Validation ROC: 0.9722992599112106
     Cross Validation F1: 0.5706149937455276
@@ -2625,10 +2625,10 @@ for kernel in solvers:
 ![png](output_60_5.png)
 
 
-    
-    
-     ========== sigmoid ========== 
-    
+
+
+     ========== sigmoid ==========
+
     [LibSVM]Done
     Cross Validation ROC: 0.7637449835341518
     Cross Validation F1: 0.40892969472647955
@@ -2653,7 +2653,7 @@ svm_model = SVC(kernel='rbf', verbose=1)
 grid = {'C': np.append(0.1**np.arange(1,3), 10**np.arange(1,2))}
 
 # Initialize with GridSearchCV with grid
-svm_grid_search = GridSearchCV(estimator=svm_model, param_grid=grid, 
+svm_grid_search = GridSearchCV(estimator=svm_model, param_grid=grid,
                      scoring='roc_auc', verbose=1, n_jobs=1, refit=True, cv=5,
                      return_train_score=True);
 
@@ -2670,7 +2670,7 @@ print('Best parameters: %s' %svm_grid_search.best_params_)
 <a id='knn'></a>
 ### K-Nearest Neighbours Classsifier
 
-While computation expensive, I wanted to try a KNN model to see if the compuation cost would be worth the result as compared to a tree based or linear model. The nearest neighbour model for classifications fit similiar points to the same group using the nearest neighbours parameter. Data that is closely associated with each other is grouped to the same class using a distance measurement. 
+While computation expensive, I wanted to try a KNN model to see if the compuation cost would be worth the result as compared to a tree based or linear model. The nearest neighbour model for classifications fit similiar points to the same group using the nearest neighbours parameter. Data that is closely associated with each other is grouped to the same class using a distance measurement.
 
 
 ```python
@@ -2708,7 +2708,7 @@ joblib.dump(knn_model, 'Model/'+knn_model.name+'_'+working_file_name+'.sav');
 
 
 ```python
-# A KNN model for only the synthetics data after dropping the second account 
+# A KNN model for only the synthetics data after dropping the second account
 # balance feature
 if working_file_name =='synthetics':
     # Import knn classifier
@@ -2717,7 +2717,7 @@ if working_file_name =='synthetics':
     knn_model.fit(train_x_reduce, train_y_reduce)
 
     # Run crossvalidation using the model
-    cross_validate_normal(knn_model, train_y=train_y_reduce, 
+    cross_validate_normal(knn_model, train_y=train_y_reduce,
                           train_x= train_x_reduce, verbose=0)
 
     # Plot confusion matrix
@@ -2792,7 +2792,7 @@ cross_validate_normal(dt_model_norm, fit_params={'sample_weight':weights}, verbo
 
 # Plot confusion matrix
 plot_confusion_normal(dt_model_norm, train_x=train_x_norm, train_y=train_y_norm,
-                     test_x = test_x_norm, test_y = test_y_norm, 
+                     test_x = test_x_norm, test_y = test_y_norm,
                       cmap=plt.cm.BuGn)
 
 # Save model
@@ -2810,7 +2810,7 @@ joblib.dump(dt_model_norm, 'Model/'+dt_model_norm.name+'_'+working_file_name+'.s
 ![png](output_72_1.png)
 
 
-A confusion matrix is great. but with now that we are dealing with Tree based model ew can use the `graphiz` package to 
+A confusion matrix is great. but with now that we are dealing with Tree based model ew can use the `graphiz` package to
 visualize the data. So lets retrain out model using data that has not gone through a PCA or scaling transformation to get a better understanding of the the data.
 
 If your this model multiple times you actually get very diffent false positive rates.
@@ -2832,7 +2832,7 @@ export_graphviz(dt_model_norm, out_file=dot_data,
                 special_characters=True)
 
 # Generate graphusing pydotplus
-graph = pydotplus.graph_from_dot_data(dot_data.getvalue()) 
+graph = pydotplus.graph_from_dot_data(dot_data.getvalue())
 
 colors = ('#62BCC1', '#F6FBEE')
 edges = collections.defaultdict(list)
@@ -2929,7 +2929,7 @@ joblib.dump(rf_model_norm, 'Model/'+rf_model_norm.name+'_'+working_file_name+'.s
 <a id='xg'></a>
 ### XG Boost
 
-XG Boost is basically an Random Forest model that support Boost Procedure after generating the ensemble of Random Forests. As this is normally the most dominent algorithim in the competive machine learning space. Lets attempt this model next. 
+XG Boost is basically an Random Forest model that support Boost Procedure after generating the ensemble of Random Forests. As this is normally the most dominent algorithim in the competive machine learning space. Lets attempt this model next.
 
 
 ```python
@@ -2961,7 +2961,7 @@ joblib.dump(xg_model, 'Model/'+xg_model.name+'_'+working_file_name+'.sav');
 ![png](output_79_1.png)
 
 
-It seem that that our roc_auc scoring metric has run into a rounding error. Let ignore the score now and just compare the number of FP and FN. 
+It seem that that our roc_auc scoring metric has run into a rounding error. Let ignore the score now and just compare the number of FP and FN.
 
 
 ```python
@@ -2976,7 +2976,7 @@ cross_validate_normal(xg_model_norm, fit_params={'sample_weight':weights}, verbo
 
 # Plot confusion matrix
 plot_confusion_normal(xg_model_norm, train_x=train_x_norm, train_y=train_y_norm,
-                     test_x = test_x_norm, test_y = test_y_norm, 
+                     test_x = test_x_norm, test_y = test_y_norm,
                       cmap=plt.cm.BuGn)
 
 # Save model
@@ -3024,7 +3024,7 @@ dbscan_train.name = 'dbscan_train'
 dbscan_test = DBSCAN(eps=eps, min_samples=min_samples)
 dbscan_test.name = 'dbscan_test'
 
-# Fit the models 
+# Fit the models
 score_unsupervised(dbscan_train, dbscan_test, 'DBSCAN')
 plot_confusion_unsuperived(dbscan_train, dbscan_test)
 ```
@@ -3044,7 +3044,7 @@ DB Scan is performing pretty poorly on the data. From my experience running this
 <a id='meanshift'></a>
 ### Mean Shift
 
-In simple the mean shift is a kernel density algorithm uses bandwidth parameter with is basically just a distance parameter to cluster data as if it were going up a hill. After defining your thresholds bandwidth the algorithm will cut cluster observation and label points that are not within the cluster given the bandwidth value. 
+In simple the mean shift is a kernel density algorithm uses bandwidth parameter with is basically just a distance parameter to cluster data as if it were going up a hill. After defining your thresholds bandwidth the algorithm will cut cluster observation and label points that are not within the cluster given the bandwidth value.
 
 
 ```python
@@ -3101,7 +3101,7 @@ if_model = IsolationForest(contamination=contamination_rate)
 if_model.name = 'isolation_forest'
 if_model.fit(train_x, sample_weight = weights)
 
-cross_validate_anomoly(if_model, fit_params={'sample_weight':weights}, 
+cross_validate_anomoly(if_model, fit_params={'sample_weight':weights},
                  verbose=0, train_y=target_to_anon(train_y), train_x=train_x)
 
 plot_confusion_anomoly(if_model, train_y, test_y)
@@ -3128,7 +3128,7 @@ One-Class SVM and its ability to capture the shape of the data set, hence perfor
 
 
 ```python
-# Isolating Calss 0 only Training 
+# Isolating Calss 0 only Training
 train_y_both = pd.Series(train_y)
 #print(train_y_both.value_counts())
 normal_index = np.where(train_y_both==0)
@@ -3139,7 +3139,7 @@ train_x_normal;
 
 
 ```python
-# Class 0 only Training 
+# Class 0 only Training
 train_y_both = pd.Series(train_y)
 print(train_y_both.value_counts())
 normal_index = np.where(train_y_both==0)
@@ -3153,8 +3153,8 @@ oc_model.name = 'one_class_svm_training_set'
 oc_model.fit(train_x_normal)
 
 #Cross Validation, Plot, Save
-cross_validate_anomoly(oc_model, cv = 5,  fit_params={'sample_weight':weights}, 
-                 verbose=0, train_y=target_to_anon(train_y), 
+cross_validate_anomoly(oc_model, cv = 5,  fit_params={'sample_weight':weights},
+                 verbose=0, train_y=target_to_anon(train_y),
                  train_x=train_x)
 plot_confusion_anomoly(oc_model, train_y, test_y)
 joblib.dump(oc_model, 'Model/'+oc_model.name+'_'+working_file_name+'.sav');
@@ -3174,7 +3174,7 @@ joblib.dump(oc_model, 'Model/'+oc_model.name+'_'+working_file_name+'.sav');
 
 
 ##### Full Training Set
-When I was reaching this alogrithim. I was not 100% sure the it only tookin the training data or the normal class. Therefore I want to conduct some senstivity analysis. Below refit the model again but on the entire training set. As I contaminate the dataset I wanted to see what woould happen. 
+When I was reaching this alogrithim. I was not 100% sure the it only tookin the training data or the normal class. Therefore I want to conduct some senstivity analysis. Below refit the model again but on the entire training set. As I contaminate the dataset I wanted to see what woould happen.
 
 
 ```python
@@ -3196,7 +3196,7 @@ ocf_model = OneClassSVM(nu = contamination_rate, gamma =0.0005)
 ocf_model.name = 'one_class_svm_full_training_set'
 ocf_model.fit(train_x, sample_weight = weights)
 
-cross_validate_anomoly(ocf_model, cv = 5,  fit_params={'sample_weight':weights}, 
+cross_validate_anomoly(ocf_model, cv = 5,  fit_params={'sample_weight':weights},
                  verbose=0, train_y=target_to_anon(train_y),
                  train_x=train_x)
 
@@ -3225,9 +3225,9 @@ lof_model = LocalOutlierFactor()
 lof_model.name = 'local_outliers_factor'
 lof_model.fit(train_x) #Had to Remvoe weight , sample_weight = weights
 
-# You cannot run cross validation on the model as the lof_model currently 
+# You cannot run cross validation on the model as the lof_model currently
 # has not predict or predict proba function
-#cross_validate_anomoly(lof_model, 
+#cross_validate_anomoly(lof_model,
 #                  verbose=0, train_y = target_to_anon(train_y),
 #                  train_x=train_x)
 
@@ -3241,7 +3241,7 @@ tuple_grid = [(i,j) for i in grid_length for j in grid_length]
 
 plt.subplot2grid((3,3), (0,0))
 cm = confusion_matrix(train_y, anon_to_target(lof_model.fit_predict(train_x)))
-plot_confusion_matrix(cm, classes, fontsize=20, 
+plot_confusion_matrix(cm, classes, fontsize=20,
                       title=lof_model.name,
                      normalize=True, cmap=plt.cm.Purples)
 
@@ -3263,7 +3263,7 @@ joblib.dump(lof_model, 'Model/'+lof_model.name+'_'+working_file_name+'.sav');
 <a id='envolope'></a>
 ### Elliptic Envelope
 
-Elliptic Envelope model goes about creating an ellipse around your data using and segment your outliers by placing an ellipsis boundary around your data. The algorithm assumes that your model is normally distributed as the model take bivariate samples of the dataset and uses multivariate Gaussian distribution to 
+Elliptic Envelope model goes about creating an ellipse around your data using and segment your outliers by placing an ellipsis boundary around your data. The algorithm assumes that your model is normally distributed as the model take bivariate samples of the dataset and uses multivariate Gaussian distribution to
 
 
 based on a robust estimator of covariance, which is assuming that the data are Gaussian distributed and performs better than the One-Class SVM in that case.
@@ -3363,7 +3363,7 @@ joblib.dump(ensemble, 'Model/ensemble_model_'+working_file_name+'.sav')
 
 This part of my capstone is very bootstrap. Neural Networks are the new hot thing at the moment. I have gone ahead and generated a Densely connected network below to see what kind of performance we can get from a pre-tuned network (Time to tune the network was not available at this time, I would do it if I had the time).
 
-Below you will wind a densely connected 3 layered network, I use the real activation function and softmax function at the end during my training. I start off with 30 layers and work my way down to 1. As you can see that I have created a few custom metrics for the roc_auc, f1, precision and recall in my neural network. 
+Below you will wind a densely connected 3 layered network, I use the real activation function and softmax function at the end during my training. I start off with 30 layers and work my way down to 1. As you can see that I have created a few custom metrics for the roc_auc, f1, precision and recall in my neural network.
 
 
 ```python
@@ -3417,7 +3417,7 @@ input_dim = train_x.shape[1]
 encoding_dim = 20
 
 input_layer = Input(shape=(input_dim, ))
-encoder = Dense(encoding_dim, activation="relu", 
+encoder = Dense(encoding_dim, activation="relu",
                 activity_regularizer=regularizers.l1(10e-5))(input_layer)
 encoder = Dense(int(encoding_dim / 2), activation="relu")(encoder)
 decoder = Dense(int(encoding_dim / 2), activation='relu')(encoder)
@@ -3428,8 +3428,8 @@ nb_epoch = 10
 batch_size = 32
 
 # Compile the network
-autoencoder.compile(optimizer='adam', 
-                    loss='mean_squared_error', 
+autoencoder.compile(optimizer='adam',
+                    loss='mean_squared_error',
                     metrics=['accuracy'])
 
 # Save model after every epoch of Training
@@ -3456,7 +3456,7 @@ history = autoencoder.fit(train_x, train_x,
 autoencoder = load_model('Model/autoencoder.h5')
 
 
-# Save predictions 
+# Save predictions
 predictions = autoencoder.predict(train_x)
 predictions = pd.DataFrame(predictions)
 
@@ -3546,7 +3546,7 @@ plt.ylabel('True Positive Rate')
 plt.xlabel('False Positive Rate')
 plt.show();
 
-# Plot Threshold 
+# Plot Threshold
 plt.figure()
 threshold = 0.25
 groups = error_df.groupby('true_class')
@@ -3590,7 +3590,7 @@ y_pred = [1 if e > threshold else 0 for e in error_df.reconstruction_error.value
 cm = confusion_matrix(error_df.true_class, y_pred)
 
 
-plot_confusion_matrix(cm, classes, fontsize=10, cmap=plt.cm.Oranges, 
+plot_confusion_matrix(cm, classes, fontsize=10, cmap=plt.cm.Oranges,
                       title='Auto Encoder: Test Set');
 ```
 
@@ -3608,7 +3608,7 @@ Since this autoencoder has not been tuned it is not performing so well. The fact
 
 <a id='metrics_agg'></a>
 ### Aggregating Metrics
-The first thing we are going to do is aggregate our historical metrics with our current metrics for the models above. I did this at the beginning of my capstone so I could compare the parameters of the model above (that have been tuned models) with previous combinations. I often change the name of the model specific models to test their sensitivity. 
+The first thing we are going to do is aggregate our historical metrics with our current metrics for the models above. I did this at the beginning of my capstone so I could compare the parameters of the model above (that have been tuned models) with previous combinations. I often change the name of the model specific models to test their sensitivity.
 
 
 ```python
@@ -3699,7 +3699,7 @@ ccdf_metric.sort_values('mean_test_roc_auc',ascending=False).head(n=5)
     <ipython-input-38-38c78da756bd> in <module>()
           1 # View top 5 model for the kaggle credit card data set
     ----> 2 ccdf_metric.sort_values('mean_test_roc_auc',ascending=False).head(n=5)
-    
+
 
     NameError: name 'ccdf_metric' is not defined
 
@@ -3775,12 +3775,12 @@ while True:
     result = result[0]
     total += 1
     if result == val_y:  
-        counter +=1 
-        print("Prediction:", result, 
+        counter +=1
+        print("Prediction:", result,
               'True:',val_y,
               'Correct Predictions:',counter,
               'Total:',total)
-    
+
 ```
 
 <br><br>
@@ -3812,4 +3812,3 @@ Conda Command: `conda env create --file keras-env.txt`
 - https://www.google.ca/url?sa=i&source=images&cd=&ved=2ahUKEwjiw7r31_zcAhWC5IMKHQqnCPcQ5TV6BAgBEAs&url=https%3A%2F%2Fwww.predix.io%2Fapi%2Fcatalog%2Fanalytics%2Fartifacts%2F53ab5bc9-3c7a-4b64-ace2-14d5bb898a78%2Ffile%3FfileName%3DIsolationForestOutlier%2520Documentation.pdf&psig=AOvVaw0roeRvzxnNy4h-K2hBg3QI&ust=1534890796436651
 - https://plot.ly/scikit-learn/plot-outlier-detection/
 - https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm
-
