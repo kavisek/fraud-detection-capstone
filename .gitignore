@@ -15,6 +15,7 @@
 *.gz
 *.sav
 *.zip
+*.gpickle
 
 # Hidden Folders
 Data
