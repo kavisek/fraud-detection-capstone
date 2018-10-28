@@ -31,6 +31,7 @@ import seaborn as sns
 import sklearn
 import tensorflow as tf
 import warnings
+import xgboost
 
 # Other Imports
 from matplotlib import rcParams, gridspec
@@ -52,7 +53,7 @@ from sklearn.preprocessing import StandardScaler
 
 # Sklearn Models
 from sklearn.dummy import DummyClassifier
-from sklearn.ensemble import RandomForestClassifier, solationForest
+from sklearn.ensemble import RandomForestClassifier, IsolationForest
 from sklearn.covariance import EllipticEnvelope
 from sklearn.pipeline import make_pipeline
 from sklearn.utils.class_weight import compute_sample_weight
@@ -90,27 +91,14 @@ print("Numpy version: {}".format(np.__version__))
 print("Pandas version: {}".format(pd.__version__))
 print("Sklearn version: {}".format(sklearn.__version__))
 print("Keras version: {}".format(keras.__version__))
-print("Scipy version: {}".format(scipy.__version__))
 print("XBG Boost version: {}".format(xgboost.__version__))
 ```
 
-    Using TensorFlow backend.
-
-
-
-    ---------------------------------------------------------------------------
-
-    ImportError                               Traceback (most recent call last)
-
-    <ipython-input-2-a1f34eaf9e2d> in <module>()
-         36 # Sklearn Models
-         37 from sklearn.dummy import DummyClassifier
-    ---> 38 from sklearn.ensemble import RandomForestClassifier, solationForest
-         39 from sklearn.covariance import EllipticEnvelope
-         40 from sklearn.pipeline import make_pipeline
-
-
-    ImportError: cannot import name 'solationForest'
+    Numpy version: 1.14.5
+    Pandas version: 0.23.4
+    Sklearn version: 0.19.0
+    Keras version: 2.2.4
+    XBG Boost version: 0.72
 
 
 <br><br>
@@ -1910,7 +1898,7 @@ An autoencoder is a specialized neural network that tries to reconstruct our dat
 
 I created an autoencoder for my capstone, to show that the methodology could be applied to this problem. I have decided to remove the code from this notebook, as the model I created did not perform so well. The reasoning around the poor performance is because most of the fraudulent data points are nested so tightly around the low amounts. The current features in this dataset are not predictive enough. The model performed poorly on locating tightly nested anomalies using a threshold. 
 
-### Grid Search
+### Random Forest Grid Search
 
 
 ```python
@@ -1953,7 +1941,7 @@ plt.ylabel('N_Estimators');
 ![png](output_81_0.png)
 
 
-### Final Model
+### Assessing the Final Model
 
 
 ```python
